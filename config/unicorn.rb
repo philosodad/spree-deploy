@@ -1,34 +1,25 @@
-# config/unicorn.rb
-# # Set environment to development unless something else is specified
-env = ENV["RAILS_ENV"] || "development"
+# paths
+app_path = "/home/spree/spree-sample-deploy"
+working_directory "#{app_path}/current"
+pid               "#{app_path}/current/tmp/pids/unicorn.pid"
 
-# See http://unicorn.bogomips.org/Unicorn/Configurator.html for complete documentation.
-worker_processes 4
+# listen
+listen "/tmp/unicorn-www.spree-sample-deploy.socket", :backlog => 64
 
-# listen on both a Unix domain socket and a TCP port, 
-# we use a shorter backlog for quicker failover when busy
-listen "/tmp/spree-sample-deploy.socket", backlog: 64
+# logging
+stderr_path "log/unicorn.stderr.log"
+stdout_path "log/unicorn.stdout.log"
 
-# Preload our app for more speed
-preload_app true
+# workers
+worker_processes 3
 
-# nuke workers after 30 seconds instead of 60 seconds (the default)
-timeout 30
-
-pid "/tmp/unicorn.spree-sample-deploy.pid"
-
-# Production specific settings
-if env == "production"
-  # Help ensure your application will always spawn in the symlinked
-  # "current" directory that Capistrano sets up.
-  working_directory "/home/spree/spree-sample-deploy/current"
-
-  # feel free to point this anywhere accessible on the filesystem user 'spree'
-  shared_path = "/home/spree/spree-sample-deploy/shared"
-
-  stderr_path "#{shared_path}/log/unicorn.stderr.log"
-  stdout_path "#{shared_path}/log/unicorn.stdout.log"
+# use correct Gemfile on restarts
+before_exec do |server|
+  ENV['BUNDLE_GEMFILE'] = "#{app_path}/current/Gemfile"
 end
+
+# preload
+preload_app true
 
 before_fork do |server, worker|
   # the following is highly recomended for Rails + "preload_app true"
@@ -39,7 +30,7 @@ before_fork do |server, worker|
 
   # Before forking, kill the master process that belongs to the .oldbin PID.
   # This enables 0 downtime deploys.
-  old_pid = "/tmp/unicorn.spree-sample-deploy.pid.oldbin"
+  old_pid = "#{server.config[:pid]}.oldbin"
   if File.exists?(old_pid) && server.pid != old_pid
     begin
       Process.kill("QUIT", File.read(old_pid).to_i)
@@ -50,15 +41,7 @@ before_fork do |server, worker|
 end
 
 after_fork do |server, worker|
-  # the following is *required* for Rails + "preload_app true"
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.establish_connection
   end
-
-  # if preload_app is true, then you may also want to check and
-  # restart any other shared sockets/descriptors such as Memcached,
-  # and Redis.  TokyoCabinet file handles are safe to reuse
-  # between any number of forked children (assuming your kernel
-  # correctly implements pread()/pwrite() system calls)
 end
-
