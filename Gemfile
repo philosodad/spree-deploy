@@ -32,7 +32,7 @@ gem 'unicorn'
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 gem 'capistrano-rvm'
-gem 'capistrano-unicorn', group: :development, require: false
+gem 'capistrano3-unicorn', group: :development, require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
