@@ -6,8 +6,7 @@ require 'capistrano/deploy'
 require 'capistrano/rails'
 require 'capistrano/bundler'
 require 'capistrano/rvm'
-require 'capistrano/unicorn'
-
+require 'capistrano-unicorn'
 # Include tasks from other gems included in your Gemfile
 #
 # For documentation on these, see for example:
