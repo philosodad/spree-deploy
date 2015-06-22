@@ -32,6 +32,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 gem 'capistrano-rvm'
+gem 'capistrano-unicorn'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -51,6 +52,7 @@ gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: '3-0-stable'
 
 group :production do
   gem 'pg'
+  gem 'unicorn'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
 end
