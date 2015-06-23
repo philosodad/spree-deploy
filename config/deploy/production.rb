@@ -60,4 +60,3 @@ set :default_env['RAILS_ENV'], 'production'
 #     # password: 'please use keys'
 #   }
 
-set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
