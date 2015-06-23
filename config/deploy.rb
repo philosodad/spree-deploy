@@ -53,11 +53,11 @@ namespace :deploy do
   end
 end
 
-namespace :images do
-  task :symlink do
-    `rm -rf home/spree/spree-sample-deploy/current/public/spree`
-    `ln -nfs home/spree/spree-sample-deploy/shared/spree home/spree/spree-sample-deploy/public/spree`
-  end
-end
-after "bundler:install", "images:symlink"
+#namespace :images do
+#  task :symlink do
+#    `rm -rf home/spree/spree-sample-deploy/current/public/spree`
+#    `ln -nfs home/spree/spree-sample-deploy/shared/spree home/spree/spree-sample-deploy/public/spree`
+#  end
+#end
+#after "bundler:install", "images:symlink"
 
