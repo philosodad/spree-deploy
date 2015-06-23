@@ -59,3 +59,5 @@ set :default_env['RAILS_ENV'], 'production'
 #     auth_methods: %w(publickey password)
 #     # password: 'please use keys'
 #   }
+
+set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
