@@ -1,1 +1,1 @@
-set :unicorn_pid, "#{current_path}/tmp/pids/unicorn.pid"
+set :unicorn_pid, "/home/spree/spree-sample-deploy/current/tmp/pids/unicorn.pid"
