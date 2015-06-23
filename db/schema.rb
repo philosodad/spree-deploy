@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150622150224) do
+ActiveRecord::Schema.define(version: 20150623180907) do
+
+  create_table "bit_pay_clients", force: :cascade do |t|
+    t.string   "api_uri"
+    t.string   "pem"
+    t.string   "facade",         default: "merchant"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "bit_payment_id"
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -88,6 +97,14 @@ ActiveRecord::Schema.define(version: 20150622150224) do
 
   add_index "spree_assets", ["viewable_id"], name: "index_assets_on_viewable_id"
   add_index "spree_assets", ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type"
+
+  create_table "spree_bit_pay_invoices", force: :cascade do |t|
+    t.string   "invoice_id"
+    t.integer  "payment_method_id"
+    t.integer  "user_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
 
   create_table "spree_calculators", force: :cascade do |t|
     t.string   "type"
@@ -319,7 +336,7 @@ ActiveRecord::Schema.define(version: 20150622150224) do
   add_index "spree_payment_methods", ["id", "type"], name: "index_spree_payment_methods_on_id_and_type"
 
   create_table "spree_payments", force: :cascade do |t|
-    t.decimal  "amount",               precision: 10, scale: 2, default: 0.0, null: false
+    t.decimal  "amount",                    precision: 10, scale: 2, default: 0.0, null: false
     t.integer  "order_id"
     t.integer  "source_id"
     t.string   "source_type"
@@ -327,11 +344,12 @@ ActiveRecord::Schema.define(version: 20150622150224) do
     t.string   "state"
     t.string   "response_code"
     t.string   "avs_response"
-    t.datetime "created_at",                                                  null: false
-    t.datetime "updated_at",                                                  null: false
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
     t.string   "number"
     t.string   "cvv_response_code"
     t.string   "cvv_response_message"
+    t.integer  "spree_bit_pay_invoices_id"
   end
 
   add_index "spree_payments", ["order_id"], name: "index_spree_payments_on_order_id"
